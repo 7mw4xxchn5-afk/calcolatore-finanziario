@@ -1,15 +1,15 @@
-#Introduzione
-z=input("Ciao! Cosa vuoi fare?\n\nA)Calcolare il prezzo di un'obbligazione\nB)Calcolare la Duration di un portafoglio finanziario\nC)Calcolare la rata di un mutuo\n\n")
+#Introduction
+z = input("Hello! What would you like to do?\n\nA)Calculate the price of a bond\nB)Calculate the Duration of a financial portfolio\nC)Calculate the monthly mortgage payment\n\n")
 
 
-# Prezzo Obbligazione
+# Bond Price
 
 def prezzo_con_cedole():
-    t = int(input("Tra quanti anni scade l'obbligazione? "))
-    it = float(input("Inserire il TRES in %: "))
-    ic = float(input("Inserire il tasso cedolare annuo in %: "))
-    vn = float(input("Inserire il valore nominale: "))
-    tipo = int(input("Numero di cedole all'anno: "))
+    t = int(input("In how many years does the bond mature? "))
+    it = float(input("Enter the Yield to Maturity (YTM) in %: "))
+    ic = float(input("Enter the annual coupon rate in %: "))
+    vn = float(input("Enter the face value: "))
+    tipo = int(input("Enter the number of coupon payments per year: "))
 
     prezzo = 0.0
     cedola = ((ic / 100) * vn) / tipo
@@ -25,9 +25,9 @@ def prezzo_con_cedole():
 
 
 def prezzo_senza_cedole():
-    t = int(input("Tra quanti anni scade l'obbligazione? "))
-    vn = float(input("Inserire il valore nominale: "))
-    i = float(input("Inserire il rendimento in %: "))
+    t = int(input("In how many years does the bond mature? "))
+    vn = float(input("Enter the face value: "))
+    i = float(input("Enter the yield in %: "))
 
     prezzo = vn / ((1 + i/100) ** t)
 
@@ -35,35 +35,33 @@ def prezzo_senza_cedole():
 
 
 if z in ["A", "a"]:
-    x = input("L'obbligazione paga cedole intermedie? (si/no): ").lower()
+    x = input("Does the bond pay coupons? (yes/no): ").lower()
 
-    if x in ["si", "sì", "sí", "s"]:
+    if x in ["yes", "y"]:
         prezzo = prezzo_con_cedole()   
-        print("\nPrezzo obbligazione:", round(prezzo, 2))
+        print("\nBond price:", round(prezzo, 2))
 
     elif x in ["no", "n"]:
         prezzo = prezzo_senza_cedole() 
-        print("\nPrezzo obbligazione:", round(prezzo, 2))
+        print("\nBond price:", round(prezzo, 2))
 
     else:
-        print("Risposta non valida.")
+        print("Invalid answer.")
 
 
 
-#Duration di un portafoglio finanziario
-
+# Duration of a financial portfolio
 
 def duration():
-    y = input("L'obbligazione paga cedole intermedie? (si/no): ").lower()
+    y = input("Does the bond pay coupons? (yes/no): ").lower()
     
-    if y in ["si", "sì", "sí", "s"]:
-        t = int(input("Tra quanti anni scade l'obbligazione? "))
-        it = float(input("Inserire il TRES in %: "))
-        ic = float(input("Inserire il tasso cedolare annuo in %: "))
-        vn = float(input("Inserire il valore nominale: "))
-        tipo = int(input("Numero di cedole all'anno: "))
+    if y in ["yes", "y"]:
+        t = int(input("In how many years does the bond mature? "))
+        it = float(input("Enter the Yield to Maturity (YTM) in %: "))
+        ic = float(input("Enter the annual coupon rate in %: "))
+        vn = float(input("Enter the face value: "))
+        tipo = int(input("Number of coupon payments per year: "))
 
-        
         prezzo = 0.0
         cedola = ((ic / 100) * vn) / tipo
 
@@ -89,9 +87,9 @@ def duration():
         return prezzo, dur
     
     elif y in ['no', 'n']:
-        t = int(input("Tra quanti anni scade l'obbligazione? "))
-        vn = float(input("Inserire il valore nominale: "))
-        i = float(input("Inserire il rendimento in %: "))
+        t = int(input("In how many years does the bond mature? "))
+        vn = float(input("Enter the face value: "))
+        i = float(input("Enter the yield in %: "))
 
         prezzo = vn / ((1 + i/100) ** t)
         dur = t  
@@ -99,13 +97,13 @@ def duration():
         return prezzo, dur
 
     else:
-        print("Risposta non valida.")
+        print("Invalid answer.")
         return None, None
 
         
 
 if z in ['B', 'b']:
-    x = int(input('Di quanti titoli è composto il tuo portafoglio? '))
+    x = int(input('How many securities does your portfolio contain? '))
 
     if x == 1:
         prezzo, dur = duration()
@@ -127,14 +125,27 @@ if z in ['B', 'b']:
         for v in range(x):
             duration_tot = duration_tot + (prezzi[v] / sum(prezzi)) * durations[v]
 
-        print('\nLa Duration del tuo portafoglio è di', duration_tot, 'anni')
-
-
-#Rata di un mutuo
+        print('\nThe Duration of your portfolio is', duration_tot, 'years')
 
 
 
+# Mortgage payment
 
+if z in ['C','c']:
+    C = float(input('Enter the loan amount: '))
+    i = float(input('Enter the periodic interest rate (monthly) in %: '))
+    n = int(input('Enter the total number of months: '))
 
+    i = i / 100   
 
+    rata = C * (i * (1 + i)**n) / ((1 + i)**n - 1)
 
+    print('Your monthly payment is', str(round(rata, 2)) + '€')
+
+    x = input('Do you want to calculate the total interest paid? ').lower()
+
+    if x in ["yes", "y"]:
+        quota = rata * n - C
+        print('Total interest paid:', str(round(quota, 2)) + '€')
+    else:
+        pass
